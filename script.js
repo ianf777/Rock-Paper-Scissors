@@ -1,6 +1,11 @@
 let hand = "";
 let playerWins = 0;
 let computerWins = 0;
+let numRounds = 0;
+let victor = "";
+const rock = document.getElementById("rock");
+const paper = document.getElementById("paper");
+const scissors = document.getElementById("scissors");
 
 function computerHand(min, max) {
   let randomizer = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -15,50 +20,53 @@ function computerHand(min, max) {
   return hand;
 }
 
-function playersHand() {
-  let input = prompt("Please choose rock, paper, or scissors");
-  return input.toLowerCase();
-}
-
 function round(playerChoice, computersChoice) {
   /*DRAW CASE*/
   if (playerChoice === computersChoice) {
-    console.log("It's a draw!");
+    victor = "It's a draw!";
     /* ROCK CASE */
   } else if (playerChoice === "rock" && computersChoice === "paper") {
-    console.log("You lose! Paper beats rock.");
+    victor = "You lose! Paper beats rock.";
     computerWins += 1;
   } else if (playerChoice === "rock" && computersChoice === "scissors") {
-    console.log("You win! Rock beats scissors.");
+    victor = "You win! Rock beats scissors.";
     playerWins += 1;
     /* PAPER CASE */
   } else if (playerChoice === "paper" && computersChoice === "rock") {
-    console.log("You win! Paper beats rock.");
+    victor = "You win! Paper beats rock.";
     playerWins += 1;
   } else if (playerChoice === "paper" && computersChoice === "scissors") {
-    console.log("You lose! scissors beats paper.");
+    victor = "You lose! scissors beats paper.";
     computerWins += 1;
     /* SCISSORS CASE */
   } else if (playerChoice === "scissors" && computersChoice === "rock") {
-    console.log("You lose! rock beats scissors.");
+    victor = "You lose! rock beats scissors.";
     computerWins += 1;
   } else if (playerChoice === "scissors" && computersChoice === "paper") {
-    console.log("You win! scissors beats paper.");
+    victor = "You win! scissors beats paper";
     playerWins += 1;
   }
 }
 
-function playRounds() {
-  for (let i = 0; i < 5; i++) {
-    let playerChoice = playersHand(); // Move inside the loop
-    let computersChoice = computerHand(1, 3); // Move inside the loop
-
-    round(playerChoice, computersChoice);
-    console.log("Round " + (i + 1));
-    console.log("Player Wins: " + playerWins);
-    console.log("Computer Wins: " + computerWins);
-    console.log("----------------------------------------------");
-  }
+function playRound(playerChoice, computerHand) {
+  round(playerChoice.toLowerCase(), computerHand(1, 3));
+  const results = document.querySelector(".results");
+  results.innerHTML += `round: ${(numRounds += 1)}<br>
+  Player wins: ${playerWins}<br>
+  Computer Wins: ${computerWins}<br>
+  ${victor}<br>
+  ----------------------------------------------------------------<br>
+  `;
 }
 
-playRounds();
+rock.addEventListener("click", function () {
+  playRound("rock", computerHand);
+});
+
+paper.addEventListener("click", function () {
+  playRound("paper", computerHand);
+});
+
+scissors.addEventListener("click", function () {
+  playRound("scissors", computerHand);
+});
